@@ -1,12 +1,13 @@
 import {useState, useTransition} from "react";
-//import axios from "axios";
+import axios from "axios";
 
 export default function FormData() {
 const intial={name:"",password:"",email:"",contact:""}; // state for  every input field
 const [query, setQuery] = useState(intial); // this hook capture the event in input field by the user
 const [ispending, startTransition]=useTransition(); // it will proritize the topmost work and is pending is UI interactive so user can see if form is being submmited
 const [error,setError]=useState({}); // managing the error and setting them
-//const [messgae, setMessgae] = useState(null); // provide message  if data has been sent to the backend
+const [messgae, setMessgae] = useState(""); // provide message  if data has been sent to the backend
+const [messageType,setMessageType] = useState(""); //show green for success and red for error
 const [ispassword,setPassword]=useState(false); // generally used for password toogle to password to text
 const [submit,setSubmit]=useState(false); // for button to disable once user has submmited
 
@@ -23,7 +24,7 @@ const [submit,setSubmit]=useState(false); // for button to disable once user has
             ...error,
             [name]:null
         });
-       // console.log(query);
+       //console.log(query);
     }
    const tooglePassword = () => {
         setPassword(!ispassword); // toogle password to text once user clicked show password
@@ -67,24 +68,16 @@ const [submit,setSubmit]=useState(false); // for button to disable once user has
         startTransition(async ()=>{
            try{
                if(!validate()) return; //if validation fails return donot execute the next
-               setError({})
-               //actual form form submission to the backend
-              // const response = await axios.post("http://localhost:3000",query);
-              //  if (response.status === 200){
-              //      setMessgae(response.data.message);
-              //
-              //  }
-              //  else{
-              //      setMessgae(response.data.message);
-              //  }
-
-               await new Promise((resolve) => setTimeout(resolve, 2));
-               setQuery(intial);
-              console.log("submmited",query);
-
+               setError({});
+               const response = await axios.post("http://localhost:3000",query);
+               console.log(response.data.message);
+               setMessgae("Your information has been inserted");
+               setMessageType("success");
 
            }
            catch(error){
+               setMessgae("error occured while sending ");
+               setMessageType("error");
 
                console.log(error.message);
 
@@ -97,34 +90,39 @@ const [submit,setSubmit]=useState(false); // for button to disable once user has
     }
     return (
         <>
-            <div>
-                <form onSubmit={handleSubmit}>
-                    <h1>Login</h1>
-                    <div className="flex flex-col w-44 gap-2">
-                        <div>
-                            <input className=" border border-solid border-black" type="text" name="name" placeholder="Enter your name" value={query.name} onChange={handleChange} disabled={ispending}/>
+            <div className=" flex justify-center items-center min-h-screen bg-gray ">
+                <form  className=" mt-10 bg-white-100 p-8 rounded-xl shadow-lg w-full max-w-md" onSubmit={handleSubmit}>
+                    <div className="text-center  mb-8">
+                        <span className="font-medium text-3xl ">Hi! Welcome 👋</span>
+
+                    </div>
+
+
+                    <div className="space-y-4">
+                        <div className="mt-2">
+                            <input className=" border border-solid border-black w-full h-8 rounded-xl  " type="text" name="name" placeholder="Enter your name" value={query.name} onChange={handleChange} disabled={ispending} spellCheck="true" />
                             {error.name && <span style={{color:"red"}}>{error.name}</span>}
                         </div>
 
-                        <div>
-                            <input className=" border border-solid border-black" type={ispassword ?"text":"password"} name="password" placeholder="Enter your password " value={query.password} onChange={handleChange} disabled={ispending}/>
+                        <div className="  mt-3">
+                            <input className=" border border-solid border-black w-full h-8 rounded-xl" type={ispassword ?"text":"password"} name="password" placeholder="Enter your password " value={query.password} onChange={handleChange} disabled={ispending}/>
                             {error.password && <span style={{color:"red"}}>{error.password}</span>}
                         </div>
 
-                        <div>
-                            <input className=" border border-solid border-black" type="email" name="email" placeholder="Enter your email" value={query.email} onChange={handleChange} disabled={ispending}/>
+                        <div className="mt-3">
+                            <input className=" border border-solid border-black w-full h-8 rounded-xl" type="email" name="email" placeholder="Enter your email" value={query.email} onChange={handleChange} disabled={ispending}/>
                             {error.email && <span style={{color:"red"}}>{error.email}</span>}
                         </div>
 
-                        <div>
-                            <input className=" border border-solid border-black" type="text" name="contact" placeholder="Enter your contact" value={query.contact} onChange={handleChange} disabled={ispending}/>
+                        <div className="mt-3">
+                            <input className=" border border-solid border-black w-full h-8 rounded-xl" type="text" name="contact" placeholder="Enter your contact" value={query.contact} onChange={handleChange} disabled={ispending}/>
                             {error.contact&&<span style={{color:"red"}}>{error.contact}</span>}
                         </div>
 
 
 
                     </div>
-                    <div>
+                    <div className=" flex justify-center items-center mt-2">
                         <label htmlFor="toggle">
 
                             <input type="checkbox" onClick={tooglePassword} />
@@ -132,9 +130,12 @@ const [submit,setSubmit]=useState(false); // for button to disable once user has
                         </label>
                     </div>
                     <div className="">
-                        <button className="border  py-1 px-2 rounded-full bg-gray-700 text-white " type="submit" disabled={submit}>{submit?"processing...":"submit"}</button>
+                        <button className="border  py-1 px-2 rounded-full bg-purple-700 hover:bg-purple-500  disabled:opacity-50  text-white w-full h-8" type="submit" disabled={submit}>{submit?"processing...":"submit"}</button>
                     </div>
                 </form>
+                <div>
+                    <p className="text-3xl text-center font-bold">{messgae && messageType==="success"? "success":"error"}</p>
+                </div>
             </div>
 
         </>
