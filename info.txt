@@ -1,0 +1,8 @@
+steps for user to login into the app
+1.middleware will simple check for error and see request body and url  and pass the contol to next function
+2.routes will create a object for the user
+3.models will used for connecting to database and defining the user schema
+
+Todo list
+1.define user schema for login
+a.user can enter name,password,email and contact
