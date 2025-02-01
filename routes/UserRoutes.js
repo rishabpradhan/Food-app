@@ -1,14 +1,20 @@
 const express=require("express");
 const router=express.Router();
+const checkUser=require("../controllers/userController");
 
 const User = require("../models/userSchema"); // importing the user schema
 
-router.post("/",async (req,res)=>{
+router.post("/signin",async (req,res)=>{
     const {firstname,lastname,password,email,contact} = req.body;
     if(!firstname || !lastname|| !password || !email || !contact){
         return res.status(400).send("Please enter a required field");
     }
+
     try{
+        const exitingUser=await User.findOne({email});
+        if(exitingUser){
+            return res.status(400).send("User already exists");
+        }
         const userResult= await User.create({
             firstname,
             lastname,
@@ -25,4 +31,5 @@ router.post("/",async (req,res)=>{
 
     }
 });
+router.post("/login",checkUser);
 module.exports = router;

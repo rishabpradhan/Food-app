@@ -5,6 +5,9 @@ const cors=require("cors");
 const dbconnection=require("./models/database");
 const logger=require("./middleware/logger");
 const UserRoutes=require("./routes/UserRoutes");
+
+
+
 const port=3000;
 
 app.use(express.json()); // converting the request from backend into json format
@@ -36,8 +39,7 @@ app.get("/",(req,res)=>{
 });
 // handing anu custom error
 app.use((error, req, res, next) => {
-    console.error(error.message);
-    return res.status(500).json({ msg: "internal server error " });
+    return res.status(500).json({ message: "internal server error " });
 });
 app.use((req,res,next)=>{
    console.log(req.body);
@@ -45,6 +47,7 @@ app.use((req,res,next)=>{
 
 });
 app.use("/users",UserRoutes);
+
 app.listen(port,()=>{
     console.log("Server running on port:",port);
 })
