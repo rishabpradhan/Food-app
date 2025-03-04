@@ -2,7 +2,7 @@ export default function Dashboard(){
     return(
         <>
             <div>
-                <h1>Hello from dashboard</h1>
+                <h1 className="text-2xl">Hello from dashboard</h1>
             </div>
         </>
     )

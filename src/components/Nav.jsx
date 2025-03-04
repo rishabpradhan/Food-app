@@ -1,25 +1,26 @@
+import {Link} from 'react-router-dom'
 export default function Nav() {
     const Navlinks=[
         {
             id:1,
             name:"Home",
-            link:"/#",
+            link:"/",
         },
         {
            id:2,
            name:"About",
-           link:"/#",
+           link:"/about",
 
         },
         {
             id:3,
             name:"Recipes",
-            link:"/#",
+            link:"/recipes",
         },
         {
             id:4,
             name:"LogIn",
-            link:"/#",
+            link:"/form",
         }
     ]
 
@@ -42,7 +43,7 @@ export default function Nav() {
                          {
                           Navlinks.map(({id,link,name})=>(
                               <li key={id}>
-                                  <a href={link} className="inline-block font-bold hover:text-purple-500  text-xl" >{name} </a>
+                                  <Link to={link} className="inline-block font-bold hover:text-purple-500  text-xl" >{name} </Link>
                               </li>
 
                           ))}

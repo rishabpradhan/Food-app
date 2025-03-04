@@ -24,4 +24,6 @@ dist-ssr
 *.sw?
 .idea
 .node_modules
+convex
+recipes
 

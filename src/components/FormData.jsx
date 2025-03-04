@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import {Link} from "react-router-dom";
 
 export default function FormData() {
     const initial = { firstname: "",lastname:"", password: "", email: "", contact: "" }; // initial state for input fields
@@ -74,7 +75,7 @@ export default function FormData() {
             }
 
             setError({});  // Clear any previous errors
-            const response = await axios.post("http://localhost:3000/users", query,{
+            const response = await axios.post("http://localhost:3000/users/signin", query,{
                 timeout:10000,
                 }
             );  // Send data to backend
@@ -164,8 +165,10 @@ export default function FormData() {
                             <input type="checkbox" onClick={togglePassword} />
                             <span>Show password</span>
                         </label>
-                    </div>
 
+                    </div>
+                    <p className="text-center font-serif font-normal text-blue-500 hover:text-blue-800 ">Already have account?</p>
+                    <Link to="/login" className="font-serif font-normal text-blue-500 hover:text-blue-800 text-center block" >Login</Link>
                     <div>
                         <button
                             className="border py-1 px-2 rounded-full bg-purple-700 hover:bg-purple-500 disabled:opacity-50 text-white w-full h-8"

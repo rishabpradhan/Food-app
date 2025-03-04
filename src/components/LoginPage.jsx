@@ -7,7 +7,7 @@ export default function LoginPage() {
     const [query, setQuery] = useState(initial);
     const[error,setError] = useState({});
     const [password, setPassword] = useState(false);
-    const navigate=useNavigate();
+   const navigate=useNavigate();
 
     const tooglePassword = () => {
         setPassword(true);
@@ -32,7 +32,7 @@ export default function LoginPage() {
             const response= await axios.post("http://localhost:3000/users/login",query);
             if(response.status === 200){
                 localStorage.setItem("token",response.data.token);
-                navigate("/dashboard");
+               navigate("/dashboard");
             }
 
         }
@@ -61,12 +61,13 @@ export default function LoginPage() {
                         <input className="border border-solid border-black rounded-xl w-auto" type={password?"text":"password"} name="password" value={query.password} onChange={handleChange} />
                     </div>
                     <div className="flex justify-center items-center">
-
                      <label htmlFor="passwordtoggle">
                          <input type="checkbox" onClick={tooglePassword}/>
                          <span className="font-medium font-inter">show password</span>
                      </label>
+
                     </div>
+
 
 
                     <div className="flex justify-center items-center">
@@ -75,7 +76,9 @@ export default function LoginPage() {
                     </div>
                     </div>
                 </form>
+
             </div>
+
         </>
     )
 }
