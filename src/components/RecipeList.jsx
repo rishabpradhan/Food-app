@@ -1,8 +1,10 @@
 import { useQuery } from "convex/react";
-import { api } from "../../convex/_generated/api"; //
+import { api } from "../../recipes/convex/_generated/api.js";
+
 
 const RecipeList = () => {
-  const recipes = useQuery(api.getRecipes); //
+  const [searchTerm, setSearchTerm] = useState("");
+  const recipes = useQuery(api.getrecipe.getRecipes); //
 
   if (recipes === undefined) {
     return <p>Loading recipes...</p>;
