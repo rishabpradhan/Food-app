@@ -14,8 +14,8 @@ import type {
   FunctionReference,
 } from "convex/server";
 import type * as convex from "../convex.js";
-import type * as getrecipe from "../queries/getRecipes";
 import type * as insertRecipes from "../insertRecipes.js";
+import type * as queries_getRecipes from "../queries/getRecipes.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -27,8 +27,8 @@ import type * as insertRecipes from "../insertRecipes.js";
  */
 declare const fullApi: ApiFromModules<{
   convex: typeof convex;
-  getrecipe: typeof getrecipe;
   insertRecipes: typeof insertRecipes;
+  "queries/getRecipes": typeof queries_getRecipes;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,

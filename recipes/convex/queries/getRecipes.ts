@@ -1,7 +1,5 @@
-import { query } from "../_generated/server"; //
+import { query } from "../_generated/server";
 
-export const getRecipes = query({
-    handler: async (ctx) => {
-        return await ctx.db.query("recipes").collect();
-    },
+export const getRecipes = query(async ({ db }) => {
+    return await db.query("recipes").collect();
 });
