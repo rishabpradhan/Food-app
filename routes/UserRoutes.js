@@ -1,35 +1,41 @@
-const express=require("express");
-const router=express.Router();
-const checkUser=require("../controllers/userController");
+const express = require("express");
+const router = express.Router();
+const loginUser = require("../controllers/userController");
+const User = require("../models/userSchema");
+const bcrypt = require("bcrypt");
 
-const User = require("../models/userSchema"); // importing the user schema
+router.post("/signin", async (req, res) => {
+  const { firstname, lastname, password, email, contact } = req.body;
 
-router.post("/signin",async (req,res)=>{
-    const {firstname,lastname,password,email,contact} = req.body;
-    if(!firstname || !lastname|| !password || !email || !contact){
-        return res.status(400).send("Please enter a required field");
+  if (!firstname || !lastname || !password || !email || !contact) {
+    return res.status(400).send("Please enter all required fields");
+  }
+
+  try {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).send("User already exists");
     }
 
-    try{
-        const exitingUser=await User.findOne({email});
-        if(exitingUser){
-            return res.status(400).send("User already exists");
-        }
-        const userResult= await User.create({
-            firstname,
-            lastname,
-            password,
-            email,
-            contact,
+    // Hash the password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
-        });
+    const userResult = await User.create({
+      firstname,
+      lastname,
+      password: hashedPassword, // Store hashed password
+      email,
+      contact,
+    });
+
     console.log(userResult);
-        return res.status(200).json({message:"Successfully created user"});
-    }
-    catch(err){
-        return res.status(400).send(err.message);
-
-    }
+    return res.status(200).json({ message: "Successfully created user" });
+  } catch (err) {
+    console.error("Signup error:", err);
+    return res.status(400).send(err.message);
+  }
 });
-router.post("/login",checkUser);
+
+router.post("/login", loginUser);
 module.exports = router;
