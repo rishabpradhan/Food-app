@@ -1,30 +1,29 @@
-const express=require("express");
-const app=express();
-const mongoose=require("mongoose");
-const cors=require("cors");
-const dbconnection=require("./models/database");
-const logger=require("./middleware/logger");
-const UserRoutes=require("./routes/UserRoutes");
+const express = require("express");
+const app = express();
+const mongoose = require("mongoose");
+const cors = require("cors");
+const dbconnection = require("./models/database");
+const logger = require("./middleware/logger");
+const UserRoutes = require("./routes/UserRoutes");
+const AdminRoutes = require("./routes/AdminRoutes");
 
-
-
-const port=3000;
+const port = 3000;
 
 app.use(express.json()); // converting the request from backend into json format
-app.use(express.urlencoded({extended:true}));
+app.use(express.urlencoded({ extended: true }));
 
 //allowing request from frontend
 
-try{
-app.use(cors({
-    origin:"http://localhost:5173",
-    method:["GET,POST"]
-})
-);
-}
-catch(error){
-console.error(error.message);
-
+try {
+  app.use(
+    cors({
+      origin: "http://localhost:5173",
+      methods: ["GET", "POST", "PUT", "DELETE"], // ✅ not ["GET,POST"]
+      credentials: true,
+    })
+  );
+} catch (error) {
+  console.error(error.message);
 }
 
 //for middleware
@@ -32,22 +31,21 @@ app.use(logger);
 
 dbconnection();
 
-app.get("/",(req,res)=>{
-    res.send("Welcome");
-    res.end();
-
+app.get("/", (req, res) => {
+  res.send("Welcome");
+  res.end();
 });
 // handing anu custom error
 app.use((error, req, res, next) => {
-    return res.status(500).json({ message: "internal server error " });
+  return res.status(500).json({ message: "internal server error " });
 });
-app.use((req,res,next)=>{
-   console.log(req.body);
-   next();
-
+app.use((req, res, next) => {
+  console.log(req.body);
+  next();
 });
-app.use("/users",UserRoutes);
+app.use("/users", UserRoutes);
+app.use("/admin", AdminRoutes);
 
-app.listen(port,()=>{
-    console.log("Server running on port:",port);
-})
+app.listen(port, () => {
+  console.log("Server running on port:", port);
+});
