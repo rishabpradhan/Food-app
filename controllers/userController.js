@@ -21,7 +21,7 @@ const loginUser = async (req, res) => {
 
     // Generate token with 1 day expiration
     const token = jwt.sign(
-      { userId: user._id, email: user.email },
+      { userId: user._id, email: user.email, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: "1d" }
     );
@@ -30,6 +30,7 @@ const loginUser = async (req, res) => {
       message: "Authentication successful",
       token,
       userId: user._id,
+      role: user.role,
     });
   } catch (err) {
     console.error("Authentication error:", err.message);
