@@ -27,6 +27,7 @@ router.post("/signin", async (req, res) => {
       password: hashedPassword, // Store hashed password
       email,
       contact,
+      role: email === "admin@gmail.com" ? "admin" : "user",
     });
 
     console.log(userResult);
@@ -36,6 +37,7 @@ router.post("/signin", async (req, res) => {
     return res.status(400).send(err.message);
   }
 });
+// count number of users in database
 
 router.post("/login", loginUser);
 module.exports = router;
