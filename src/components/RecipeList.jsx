@@ -5,7 +5,6 @@ import { useState } from "react";
 const RecipeList = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Fetch both regular recipes and video recipes
   const regularRecipes = useQuery(api.queries.getRecipes.getRecipes);
   const videoRecipes = useQuery(api.queries.getVideoRecipes.getVideoRecipes);
 
@@ -15,7 +14,6 @@ const RecipeList = () => {
     );
   }
 
-  // Combine both regular and video recipes with null checks
   const combinedRecipes = [
     ...(regularRecipes || []).map((recipe) => ({
       ...recipe,
@@ -24,7 +22,6 @@ const RecipeList = () => {
     ...(videoRecipes || []).map((recipe) => ({ ...recipe, _type: "video" })),
   ];
 
-  // Filter based on search term
   const filteredRecipes = combinedRecipes.filter((recipe) =>
     recipe.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -56,61 +53,65 @@ const RecipeList = () => {
           filteredRecipes.map((recipe) => (
             <div
               key={recipe._id}
-              className="bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden font-sans"
+              className="bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden font-sans flex flex-col"
             >
-              {/* Display Image or Video */}
               {recipe._type === "regular" ? (
                 <>
                   <img
                     src={recipe.image}
                     alt={recipe.title}
-                    className="w-full h-48 object-cover"
+                    className="w-full max-h-64 object-contain"
                   />
-                  <div className="p-5">
-                    <h3 className="text-xl font-semibold mb-2">
-                      {recipe.title}
-                    </h3>
-                    <div className="flex items-center text-sm text-gray-500 mb-4">
+                  <div className="p-5 flex flex-col gap-3">
+                    <h3 className="text-xl font-semibold">{recipe.title}</h3>
+                    <div className="flex items-center text-sm text-gray-500">
                       <span className="mr-4">⏱ {recipe.cookingTime} mins</span>
                       <span>🔥 {recipe.calories} kcal</span>
                     </div>
-                    <h4 className="font-medium mb-1">Ingredients:</h4>
-                    <ul className="list-disc list-inside text-gray-700 mb-4">
-                      {Array.isArray(recipe.ingredients) ? (
-                        recipe.ingredients.map((ingredient, index) => (
-                          <li key={index}>{ingredient}</li>
-                        ))
-                      ) : (
-                        <li>{recipe.ingredients}</li>
-                      )}
-                    </ul>
-                    <h4 className="font-medium mb-1">Instructions:</h4>
-                    <ul className="list-decimal list-inside text-gray-800">
-                      {Array.isArray(recipe.instructions) ? (
-                        recipe.instructions.map((step, index) => (
-                          <li key={index}>{step}</li>
-                        ))
-                      ) : (
-                        <li>{recipe.instructions}</li>
-                      )}
-                    </ul>
+
+                    {recipe.ingredients && (
+                      <>
+                        <h4 className="font-medium">Ingredients:</h4>
+                        <ul className="list-disc list-inside text-gray-700">
+                          {Array.isArray(recipe.ingredients) ? (
+                            recipe.ingredients.map((ingredient, index) => (
+                              <li key={index}>{ingredient}</li>
+                            ))
+                          ) : (
+                            <li>{recipe.ingredients}</li>
+                          )}
+                        </ul>
+                      </>
+                    )}
+
+                    {recipe.instructions && (
+                      <>
+                        <h4 className="font-medium">Instructions:</h4>
+                        <ul className="list-decimal list-inside text-gray-800">
+                          {Array.isArray(recipe.instructions) ? (
+                            recipe.instructions.map((step, index) => (
+                              <li key={index}>{step}</li>
+                            ))
+                          ) : (
+                            <li>{recipe.instructions}</li>
+                          )}
+                        </ul>
+                      </>
+                    )}
                   </div>
                 </>
               ) : (
                 <>
-                  <div className="relative" style={{ paddingBottom: "56.25%" }}>
+                  <div className="relative aspect-video">
                     <video
                       controls
-                      className="absolute top-0 left-0 w-full h-full"
-                      style={{ maxHeight: "200px" }}
+                      className="absolute top-0 left-0 w-full h-full object-contain"
                     >
                       <source src={recipe.videoUrl} type="video/mp4" />
                     </video>
                   </div>
-                  <div className="p-5">
-                    <h3 className="text-xl font-semibold mb-2">
-                      {recipe.title}
-                    </h3>
+                  <div className="p-5 flex flex-col gap-2">
+                    <h3 className="text-xl font-semibold">{recipe.title}</h3>
                     <div className="flex items-center text-sm text-gray-500">
                       <span className="mr-4">⏱ {recipe.cookingTime} mins</span>
                       <span>🔥 {recipe.calories} kcal</span>
