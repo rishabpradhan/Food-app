@@ -13,11 +13,9 @@ const AdminPage = () => {
   const [loadingStats, setLoadingStats] = useState(true);
   const [errorStats, setErrorStats] = useState(null);
 
-  // const totalRecipes = useQuery(api.queries.getUserRecipes.getUserRecipes, {});
-  // const recipesCount =
-  //   typeof totalRecipes === "number"
-  //     ? totalRecipes
-  //     : (totalRecipes?.length ?? "Loading...");
+  // Fetch all recipes from Convex
+  const allRecipes = useQuery(api.queries.getUserRecipes.getUserRecipes); // Query to get user recipes from Convex
+  const totalRecipes = allRecipes?.length || 0;
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -31,6 +29,7 @@ const AdminPage = () => {
     }
   }, [navigate]);
 
+  // Fetch the total user stats from backend
   const fetchUserStats = async () => {
     setLoadingStats(true);
     try {
@@ -49,6 +48,7 @@ const AdminPage = () => {
     }
   };
 
+  // Fetch all users from backend
   const fetchAllUsers = async () => {
     setLoadingUsers(true);
     try {
@@ -58,7 +58,6 @@ const AdminPage = () => {
         },
       });
       setUsers(res.data);
-      console.log("Fetched users:", res.data);
       setErrorUsers(null);
     } catch (error) {
       console.error("Failed to fetch users", error);
@@ -68,6 +67,7 @@ const AdminPage = () => {
     }
   };
 
+  // Delete a user from the system
   const deleteUser = async (id) => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this user?"
@@ -80,13 +80,14 @@ const AdminPage = () => {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-      fetchAllUsers(); // Refresh list
+      fetchAllUsers(); // Refresh user list after deletion
     } catch (error) {
       console.error("Failed to delete user", error);
       alert("Error deleting user.");
     }
   };
 
+  // Handle admin logout
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
@@ -94,7 +95,7 @@ const AdminPage = () => {
   };
 
   return (
-    <div className="admin-page p-6 max-w-5xl mx-auto">
+    <div className="admin-page p-6 max-w-6xl mx-auto">
       <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
 
       <div className="stats bg-gray-100 rounded-xl shadow-md p-6 mb-6">
@@ -108,43 +109,93 @@ const AdminPage = () => {
             <div className="mb-2">
               <strong>Total Users:</strong> {userStats}
             </div>
-            <div>
-              <strong>Total Recipes:</strong>
+            <div className="mb-2">
+              <strong>Total Recipes:</strong> {totalRecipes}
             </div>
           </>
         )}
       </div>
 
       <div className="users bg-white shadow rounded-xl p-6 mb-6">
-        <h2 className="text-xl font-semibold mb-4">All Users</h2>
+        <h2 className="text-xl font-semibold mb-4">
+          All Users & Their Recipes
+        </h2>
         {loadingUsers ? (
           <p>Loading users...</p>
         ) : errorUsers ? (
           <p className="text-red-500">{errorUsers}</p>
         ) : users.length > 0 ? (
-          <ul className="space-y-4">
-            {users.map((user) => (
-              <li
-                key={user._id}
-                className="flex justify-between items-center border p-3 rounded"
-              >
-                <div>
-                  <p>
-                    <strong>
-                      {user.firstName} {user.lastName}
-                    </strong>
-                  </p>
-                  <p className="text-sm text-gray-600">{user.email}</p>
+          users.map((user) => {
+            const userRecipes =
+              allRecipes?.filter((r) => r.userId === user._id) || [];
+            return (
+              <div key={user._id} className="border p-4 mb-4 rounded shadow-sm">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <p>
+                      <strong>
+                        {user.firstName} {user.lastName}
+                      </strong>
+                    </p>
+                    <p className="text-sm text-gray-600">{user.email}</p>
+                  </div>
+                  {user.email !== "admin@gmail.com" && (
+                    <button
+                      onClick={() => deleteUser(user._id)}
+                      className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                    >
+                      Delete
+                    </button>
+                  )}
                 </div>
-                <button
-                  onClick={() => deleteUser(user._id)}
-                  className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-                >
-                  Delete
-                </button>
-              </li>
-            ))}
-          </ul>
+
+                {userRecipes.length > 0 ? (
+                  <div className="mt-4">
+                    <p className="font-semibold">Recipes:</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-2">
+                      {userRecipes.map((recipe) => (
+                        <div key={recipe._id} className="border rounded p-3">
+                          {recipe.image && (
+                            <img
+                              src={recipe.image}
+                              alt={recipe.title}
+                              className="w-full h-40 object-cover rounded"
+                            />
+                          )}
+
+                          {/* If videoUrl exists, embed the video using an iframe */}
+                          {recipe.videoUrl && (
+                            <div className="relative pb-[56.25%] h-0 mb-3 mt-2">
+                              <iframe
+                                src={recipe.videoUrl}
+                                title={recipe.title}
+                                frameBorder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                                className="absolute top-0 left-0 w-full h-full rounded"
+                              />
+                            </div>
+                          )}
+
+                          <h3 className="font-bold mt-2">{recipe.title}</h3>
+                          <p className="text-sm text-gray-700">
+                            {recipe.instruction?.slice(0, 100)}...
+                          </p>
+                          <p className="text-xs text-gray-500 mt-1">
+                            Type: {recipe._type}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <p className="text-sm text-gray-500 mt-2">
+                    No recipes found.
+                  </p>
+                )}
+              </div>
+            );
+          })
         ) : (
           <p>No users found.</p>
         )}
