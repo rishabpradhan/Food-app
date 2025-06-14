@@ -2,58 +2,57 @@ import React, { useState } from "react";
 
 const recipes = [
   {
-    title: "Salad",
-    health: "Rich in vitamins, low in calories.",
-    cook: "Mix greens, fruits, and nuts.",
-    image:
-      "https://images.unsplash.com/photo-1505576633757-0ac1084af824?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fHNhbGFkfGVufDB8fDB8fHww",
-    description:
-      "A refreshing salad loaded with spinach, strawberries, nuts, and feta cheese. Perfect for a healthy meal anytime!",
-  },
-  {
-    title: "Pizza",
-    health: "Source of protein and carbs.",
-    cook: "Top dough with sauce, cheese, and toppings. Bake.",
-    image:
-      "https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8cGl6emF8ZW58MHx8MHx8fDA%3D",
-    description:
-      "A classic favorite with a crispy crust, tangy tomato sauce, gooey cheese, and delicious toppings. Homemade pizza is always a hit!",
-  },
-  {
-    title: "Chicken Roll",
-    health: "High in protein and fiber.",
-    cook: "Wrap grilled chicken with veggies in a tortilla.",
-    image:
-      "https://media.istockphoto.com/id/1438449132/photo/egg-cheese-chicken-burger-shawarma-wrap-with-salad-dip-and-sauce-isolated-wooden-board-side.webp?a=1&b=1&s=612x612&w=0&k=20&c=08S_g-ccgs9WJt0srYPhrPAqrWEdTh4ZppTLqlGPWJs=",
-    description:
-      "Juicy grilled chicken, crisp veggies, and a creamy dressing wrapped in a soft tortilla. A perfect meal on-the-go!",
-  },
-  {
-    title: "Pasta Primavera",
-    health: "Full of veggies and nutrients.",
-    cook: "Toss pasta with seasonal vegetables and olive oil.",
-    image:
-      "https://media.istockphoto.com/id/626265714/photo/rotini-primavera-in-a-browned-butter-and-garlic-sauce.webp?a=1&b=1&s=612x612&w=0&k=20&c=g5NQvuNjxodF0nwbo1kESS1Suil3qKMs5_9D5ZR328w=",
-    description:
-      "A colorful and nutritious pasta dish loaded with fresh seasonal vegetables and a light olive oil dressing.",
-  },
-  {
-    title: "Berry Smoothie",
-    health: "High in antioxidants and vitamins.",
-    cook: "Blend berries with yogurt and honey.",
-    image:
-      "https://images.unsplash.com/photo-1553530666-ba11a7da3888?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8QmVycnklMjBTbW9vdGhpZXxlbnwwfHwwfHx8MA%3D%3D",
-    description:
-      "A vibrant smoothie packed with berries, creamy yogurt, and a touch of honey. Boost your energy instantly!",
-  },
-  {
-    title: "Grilled Veggie Skewers",
+    title: "Gundruk with Dhido Khas (Hill Brahmin/Chhetri)",
     health: "Low-calorie, high fiber meal.",
-    cook: "Grill assorted veggies on skewers.",
+    cook: "Boil buckwheat flour into porridge, serve with fermented greens.",
     image:
-      "https://media.istockphoto.com/id/912629972/photo/chicken-kebab-with-bell-pepper.webp?a=1&b=1&s=612x612&w=0&k=20&c=pkGNPcGNXi_CVB0LDwr6F3IIJtI60mOZpnLsMoIvyCw=",
+      "https://www.thegundruk.com/wp-content/uploads/2018/12/dhido-with-wild-mushroom-curry.jpg",
     description:
-      "A colorful combination of grilled vegetables on skewers, lightly seasoned and perfectly charred for a healthy side dish.",
+      "Dhido is a traditional thick porridge made from buckwheat or millet flour, eaten with gundruk, which is fermented leafy green vegetables. It’s nutritious and a staple in hilly regions.",
+  },
+  {
+    title: "Samay Baji–Newar community",
+    health: "Protein-rich traditional platter.",
+    cook: "Serve chiura with spiced meat, egg, soybeans & pickles.",
+    image:
+      "https://newarirecipeshut.com/wp-content/uploads/2020/09/samay-baji-aloo-tama-1536x1024.jpg",
+    description:
+      "A ceremonial platter of beaten rice (chiura), spiced meat (chhwela), boiled egg, black soybeans, pickles, and other items. It is deeply rooted in Newar rituals and festivals.",
+  },
+  {
+    title: "Thakali Khana Set–Thakali community",
+    health: "Balanced, nutritious full meal.",
+    cook: "Plate rice, dal, veggies, achar & meat curry.",
+    image: "https://recipes.timesofindia.com/photo/82048030.cms",
+    description:
+      "A complete meal of rice, lentil soup, vegetables, gundruk achar, and meat curry, known for its balanced taste, presentation, and hygienic preparation.",
+  },
+  {
+    title: "Yomari–newar community",
+    health: "Energy-dense festive sweet.",
+    cook: "Steam rice dumplings with chaku & sesame filling.",
+    image:
+      "https://i.pinimg.com/736x/ca/e3/ea/cae3ea0b78f006898535bf47608992a6.jpg",
+    description:
+      "A steamed rice-flour dumpling filled with chaku (molasses) and sesame seeds. It is especially made during the Yomari Punhi festival and symbolizes wealth and prosperity.",
+  },
+  {
+    title: "Thekuwa–Madhesi community",
+    health: "Sweet treat, rich in carbs.",
+    cook: "Deep-fry jaggery-wheat dough in ghee.",
+    image:
+      "https://thewondernepal.com/media/uploads/2025/05/06/bihari-thekua-recipe.jpg",
+    description:
+      "A sweet, crispy cookie made of wheat flour, jaggery, and ghee, deep-fried and traditionally prepared during Chhath and other religious celebrations.",
+  },
+  {
+    title: "Sukuti with Bhatmas Sadheko–Limbu community",
+    health: "High-protein, iron-rich snack.",
+    cook: "Grill dried meat, mix soybeans with spices.",
+    image:
+      "https://i.ytimg.com/vi/oQD1onfv1JY/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLAkz36f86fKK1kz2AiwWeHYmd_OKA",
+    description:
+      "Sukuti is dried smoked meat (usually buffalo), often fried or grilled, and served with bhatmas sadheko, a spiced soybean salad – a favorite snack and side dish.",
   },
 ];
 
@@ -67,7 +66,7 @@ const RecipeGrid = () => {
     <>
       <div className="p-8 mt-5">
         <p className="uppercase text-center font-inter text-2xl font-semibold text-purple-700">
-          The Latest & Greatest 🔥
+          The Greatest Nepalese Food 🔥
         </p>
       </div>
       <div className="bg-gray-100 min-h-screen p-8">

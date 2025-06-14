@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../recipes/convex/_generated/api.js";
 import { useNavigate } from "react-router-dom";
@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 const Dashboard = () => {
   const navigate = useNavigate();
   const userId = localStorage.getItem("userId");
+  const username = localStorage.getItem("firstname");
+
   const [isOpen, setIsOpen] = useState(false);
   const [videoOpen, setVideoOpen] = useState(false);
   const [title, setTitle] = useState("");
@@ -100,6 +102,7 @@ const Dashboard = () => {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("userId");
+    localStorage.removeItem("username"); // Clear username on logout
     navigate("/login");
   };
 
@@ -128,7 +131,11 @@ const Dashboard = () => {
 
       {/* Header */}
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-2xl font-bold">Dashboard</h1>
+        <div>
+          {/* Display username */}
+
+          <h2 className="text-xl font-semibold">Dashboard</h2>
+        </div>
         <button
           onClick={handleLogout}
           className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition"
@@ -185,17 +192,29 @@ const Dashboard = () => {
                       </ul>
                     </>
                   )}
+                  <h4 className="font-medium mb-1">Instructions:</h4>
+                  <ul className="list-decimal list-inside text-gray-800">
+                    {Array.isArray(recipe.instructions) ? (
+                      recipe.instructions.map((step, index) => (
+                        <li key={index}>{step}</li>
+                      ))
+                    ) : (
+                      <li>{recipe.instructions}</li>
+                    )}
+                  </ul>
                 </>
               ) : (
                 <>
                   {recipe.videoUrl && (
                     <div className="relative pb-[56.25%] h-0 mb-3">
-                      <video
-                        controls
+                      <iframe
+                        src={recipe.videoUrl}
+                        title={recipe.title}
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
                         className="absolute top-0 left-0 w-full h-full rounded"
-                      >
-                        <source src={recipe.videoUrl} type="video/mp4" />
-                      </video>
+                      />
                     </div>
                   )}
                   <h2 className="text-xl font-semibold">{recipe.title}</h2>

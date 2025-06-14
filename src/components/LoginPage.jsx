@@ -40,6 +40,8 @@ export default function LoginPage() {
       if (response.data.token) {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("userId", response.data.userId);
+        localStorage.setItem("role", response.data.role);
+        localStorage.setItem("username", response.data.firstname);
         navigate("/dashboard");
       }
     } catch (err) {

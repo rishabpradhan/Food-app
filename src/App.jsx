@@ -11,6 +11,7 @@ import RecipeList from "./components/RecipeList.jsx";
 import AdminProtectedRoute from "./components/AdminProtectedRoute.jsx";
 import AdminLogin from "./components/AdminLogin.jsx";
 import AdminPage from "./components/AdminPage.jsx";
+import About from "./components/About.jsx";
 function App() {
   return (
     <>
@@ -32,6 +33,7 @@ function App() {
           <Route path="recipes" element={<RecipeList />} />
           <Route path="form" element={<FormData />} />
           <Route path="login" element={<LoginPage />} />
+          <Route path="about" element={<About />} />
           {/* protected routes*/}
           <Route
             path="/dashboard"

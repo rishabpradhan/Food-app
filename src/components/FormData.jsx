@@ -195,9 +195,7 @@ export default function FormData() {
               <span>Show password</span>
             </label>
           </div>
-          <p className="text-center font-serif font-normal text-blue-500 hover:text-blue-800 ">
-            Already have account?
-          </p>
+
           <Link
             to="/login"
             className="font-serif font-normal text-blue-500 hover:text-blue-800 text-center block"

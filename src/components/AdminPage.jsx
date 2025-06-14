@@ -13,9 +13,10 @@ const AdminPage = () => {
   const [loadingStats, setLoadingStats] = useState(true);
   const [errorStats, setErrorStats] = useState(null);
 
-  // Fetch all recipes from Convex
-  const allRecipes = useQuery(api.queries.getUserRecipes.getUserRecipes); // Query to get user recipes from Convex
-  const totalRecipes = allRecipes?.length || 0;
+  const allRecipes = useQuery(api.queries.getUserRecipes.getUserRecipes);
+  const totalRecipes =
+    allRecipes?.filter((recipe) => recipe.userEmail !== "admin@gmail.com")
+      .length || 0;
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -29,7 +30,6 @@ const AdminPage = () => {
     }
   }, [navigate]);
 
-  // Fetch the total user stats from backend
   const fetchUserStats = async () => {
     setLoadingStats(true);
     try {
@@ -48,7 +48,6 @@ const AdminPage = () => {
     }
   };
 
-  // Fetch all users from backend
   const fetchAllUsers = async () => {
     setLoadingUsers(true);
     try {
@@ -67,7 +66,6 @@ const AdminPage = () => {
     }
   };
 
-  // Delete a user from the system
   const deleteUser = async (id) => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this user?"
@@ -80,14 +78,13 @@ const AdminPage = () => {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-      fetchAllUsers(); // Refresh user list after deletion
+      fetchAllUsers(); // Refresh user list
     } catch (error) {
       console.error("Failed to delete user", error);
       alert("Error deleting user.");
     }
   };
 
-  // Handle admin logout
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
@@ -126,8 +123,12 @@ const AdminPage = () => {
           <p className="text-red-500">{errorUsers}</p>
         ) : users.length > 0 ? (
           users.map((user) => {
+            // Don't show recipes created by admin
             const userRecipes =
-              allRecipes?.filter((r) => r.userId === user._id) || [];
+              user.email !== "admin@gmail.com"
+                ? allRecipes?.filter((r) => r.userId === user._id) || []
+                : [];
+
             return (
               <div key={user._id} className="border p-4 mb-4 rounded shadow-sm">
                 <div className="flex justify-between items-center">
@@ -163,7 +164,6 @@ const AdminPage = () => {
                             />
                           )}
 
-                          {/* If videoUrl exists, embed the video using an iframe */}
                           {recipe.videoUrl && (
                             <div className="relative pb-[56.25%] h-0 mb-3 mt-2">
                               <iframe
@@ -188,11 +188,11 @@ const AdminPage = () => {
                       ))}
                     </div>
                   </div>
-                ) : (
+                ) : user.email !== "admin@gmail.com" ? (
                   <p className="text-sm text-gray-500 mt-2">
                     No recipes found.
                   </p>
-                )}
+                ) : null}
               </div>
             );
           })
